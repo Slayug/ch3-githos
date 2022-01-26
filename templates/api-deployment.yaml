@@ -1,0 +1,53 @@
+{{- if .Values.api.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    app: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      imagePullSecrets:
+        - name: auth-master3-registry
+      containers:
+      - name: api
+        image: {{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "0.1"
+          limits:
+            memory: "300Mi"
+            cpu: "0.5"
+        env:
+          - name: DB_ENDPOINT
+            valueFrom:
+              configMapKeyRef:
+                name: api-config
+                key: DB_ENDPOINT
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: api-config
+                key: DB_NAME
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: pg-credentials  # Nom du secret
+                key: pg_username     # nom de la clef dans le config map
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pg-credentials  # Nom du secret
+                key: pg_password
+{{- end }}

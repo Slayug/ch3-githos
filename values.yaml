@@ -7,10 +7,21 @@
 
 api:
   enabled: true
+  image:
+    repository: master3.takima.io:4567/master3/kubernetes-resources/api
+    tag: latest
+  serviceName: api
+  servicePort: 80
+  healthcheck:
+    startupFailureThreshold: 30
+    startupPeriodSeconds: 10
   ingress:
+    enabled: true
+    host: api.to-replace.takima.cloud
     tls:
       enabled: false
-    host: api.apuret.takima.cloud
+      secretName: api-tls
+
 
 front:
   enabled: true

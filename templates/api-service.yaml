@@ -1,0 +1,13 @@
+{{- if .Values.api.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.api.serviceName }}
+spec:
+  selector:
+    app: api
+  ports:
+    - protocol: TCP
+      port: {{ .Values.api.servicePort }}
+      targetPort: 8080
+{{- end }}

@@ -1,0 +1,9 @@
+{{- if .Values.api.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-config
+data:
+  DB_ENDPOINT: "{{ .Values.db.serviceName }}:{{ .Values.db.servicePort }}"
+  DB_NAME: {{ .Values.db.name }}
+{{- end }}
