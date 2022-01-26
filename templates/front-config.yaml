@@ -1,0 +1,14 @@
+{{- if .Values.front.enabled }}  
+  {{- $apiUrl := "" }}  
+  {{- if .Values.api.ingress.tls.enabled }}  
+    {{- $apiUrl = printf "https://%s" .Values.api.ingress.host | quote }}  
+  {{- else }}  
+    {{- $apiUrl = printf "http://%s" .Values.api.ingress.host | quote }}  
+  {{- end }}  
+apiVersion: v1  
+kind: ConfigMap  
+metadata:  
+  name: front-config  
+data:  
+  API_URL: {{ $apiUrl }}  
+{{- end }}

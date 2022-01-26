@@ -1,0 +1,38 @@
+{{- if .Values.front.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front
+  labels:
+    app: front
+spec:
+  replicas: {{ .Values.front.replicaCount }}
+  selector:
+    matchLabels:
+      app: front
+  template:
+    metadata:
+      labels:
+        app: front
+    spec:
+      imagePullSecrets:
+        - name: auth-master3-registry
+      containers:
+      - name: front
+        image: {{ .Values.front.image.repository }}:{{ .Values.front.image.tag }}
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "0.1"
+          limits:
+            memory: "300Mi"
+            cpu: "0.5"
+        env:
+          - name: API_URL
+            valueFrom:
+              configMapKeyRef:
+                name: front-config
+                key: API_URL
+{{- end }}

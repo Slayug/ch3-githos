@@ -1,0 +1,60 @@
+{{- if .Values.db.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-database
+  labels:
+    app: pg
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg
+  template:
+    metadata:
+      labels:
+        app: pg
+    spec:
+      containers:
+      - name: postgres
+        image: {{ .Values.db.image.repository }}:{{ .Values.db.image.tag }}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pg-data
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "400Mi"
+            cpu: "0.1"
+          limits:
+            memory: "1000Mi"
+            cpu: "0.8"
+        env:
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: pg-config  # Nom du configmap
+                key: db_name     # nom de la clef dans le config map
+          - name: PGDATA
+            valueFrom:
+              configMapKeyRef:
+                name: pg-config  # Nom du configmap
+                key: db_path     # path ou installer la db dans le volume persistant
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: pg-credentials  # Nom du secret
+                key: pg_username     # nom de la clef dans le config map
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pg-credentials  # Nom du secret
+                key: pg_password     # nom de la clef dans le config map
+      volumes:
+      - name: pg-data
+        persistentVolumeClaim:
+          claimName: pg-db
+      imagePullSecrets:
+      - name: auth-master3-registry
+{{- end }}

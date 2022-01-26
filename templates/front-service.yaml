@@ -1,0 +1,13 @@
+{{- if .Values.front.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.front.serviceName }}
+spec:
+  selector:
+    app: front
+  ports:
+    - protocol: TCP
+      port: {{ .Values.front.servicePort }}
+      targetPort: 80
+{{- end }}

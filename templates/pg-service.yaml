@@ -1,0 +1,14 @@
+{{- if .Values.db.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.db.serviceName}}
+  labels:
+    app: pg
+spec:
+  type: ClusterIP
+  ports:
+   - port: {{ .Values.db.servicePort }}
+  selector:
+   app: pg
+{{- end }}

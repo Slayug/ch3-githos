@@ -1,0 +1,31 @@
+{{- if .Values.front.enabled }}
+{{- if .Values.front.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+{{- if .Values.front.ingress.tls.enabled }}
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+{{- end }}
+  name: front
+spec:
+  rules:
+  - host: {{ .Values.front.ingress.host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Values.front.serviceName }}
+            port:
+              number: {{ .Values.front.servicePort }}
+        path: /
+        pathType: Prefix
+{{- if .Values.front.ingress.tls.enabled }}
+  tls:
+  - hosts:
+      - {{ .Values.front.ingress.host }}
+    secretName: front-tls
+    {{- end }} 
+{{- end }}
+{{- end }}
