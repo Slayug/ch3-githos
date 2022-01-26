@@ -8,7 +8,7 @@
 api:
   enabled: true
   ingress:
-    host: api.to-replace.takima.cloud
+    host: api.apuret.takima.cloud
 
 front:
   enabled: true
@@ -20,7 +20,7 @@ front:
   replicaCount: 3
   ingress:
     enabled: true
-    host: www.to-replace.takima.cloud
+    host: www.apuret.takima.cloud
     tls:
       enabled: true
 
