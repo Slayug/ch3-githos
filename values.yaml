@@ -17,7 +17,7 @@ api:
     startupPeriodSeconds: 10
   ingress:
     enabled: true
-    host: api.to-replace.takima.cloud
+    host: api.apuret.takima.cloud
     tls:
       enabled: false
       secretName: api-tls
