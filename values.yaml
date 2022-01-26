@@ -8,6 +8,8 @@
 api:
   enabled: true
   ingress:
+    tls:
+      enabled: false
     host: api.apuret.takima.cloud
 
 front:
